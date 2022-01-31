@@ -7,8 +7,73 @@
     <title>Document</title>
 </head>
 <body>
+
+
+    <form>
+        <input type="text" placeholder="Add Book Name..." id="book"/><br/><br/>
+        <input type="text" placeholder="Add Authour Name.." id="author"/>
+        <input type="text" placeholder="comment" id="comment"/>
+        <input type="submit" value="ADD" id="submit"/>
+
+
+    </form>
+
+    <div id="container">
+        
+    </div>
+    
     <script>
+
+        let form = document.querySelector("form")
+        form.addEventListener("submit",addData)
+
+        function addData(event){
+            event.preventDefault();
+            let book = document.getElementById("book").value;
+            let author = document.getElementById("author").value;
+            let comment = document.getElementById("comment").value; 
             
+
+                let _data = {
+                    "book" : book,
+                    "author":author,
+                    "comments":comment
+                }
+                // console.log(_data)
+
+                fetch("http://localhost:3000/books", {
+                    method: "POST",
+                    body: JSON.stringify(_data),
+                    headers: { "Content-type": "application/json; charset=UTF-8" },
+                    })
+                    .then((response) => response.json())
+                    .then((json) => console.log(json))
+                    .catch((err) => console.log(err));
+               
+
+                fetch("http://localhost:3000/books", {
+                    method: "GET",
+                    headers: { "Content-type": "application/json;charset=UTF-8" },
+                    })
+                    .then((response) => response.json())
+                    .then((json) =>  displayData(json))
+                        
+                    .catch((err) => console.log(err));
+
+         
+            let container = document.getElementById("container")
+                function displayData(data){
+                    console.log(data)
+                    data.forEach(element => {
+                            console.log("elem:",element)
+                          let p = document.createElement("p")
+                          p.innerText = element.book
+                          container.append(p) 
+                    });
+                }
+        }
+            
+             
     </script>
 </body>
 </html>
